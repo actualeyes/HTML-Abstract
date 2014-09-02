@@ -1,6 +1,0 @@
-use HTML::Abstract::Element::Html;
-use Test::More;
-
-my $html_tag = HTML::Abstract::Element::Html->new();
-
-is($html_tag>name, 'html');
