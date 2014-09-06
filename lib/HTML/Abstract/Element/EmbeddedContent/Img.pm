@@ -1,4 +1,4 @@
-package HTML::Abstract::Element::Html;
+package HTML::Abstract::Element::EmbeddedContent::Img;
 use strict;
 use warnings;
 use Moose;

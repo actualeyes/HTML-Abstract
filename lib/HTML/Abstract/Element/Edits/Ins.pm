@@ -1,4 +1,4 @@
-package HTML::Abstract::Element::Html;
+package HTML::Abstract::Element::Edits::Ins;
 use strict;
 use warnings;
 use Moose;

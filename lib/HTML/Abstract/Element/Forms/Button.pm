@@ -1,4 +1,4 @@
-package HTML::Abstract::Element::Html;
+package HTML::Abstract::Element::Forms::Button;
 use strict;
 use warnings;
 use Moose;

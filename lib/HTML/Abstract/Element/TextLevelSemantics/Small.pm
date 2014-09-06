@@ -1,4 +1,4 @@
-package HTML::Abstract::Element::Html;
+package HTML::Abstract::Element::TextLevelSemantics::Small;
 use strict;
 use warnings;
 use Moose;
