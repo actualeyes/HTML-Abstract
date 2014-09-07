@@ -1,36 +1,48 @@
 use Test::More;
+use Test::Moose;
 use strict;
 use warnings;
 
-use HTML::Abstract::Element::Html;
-use HTML::Abstract::Element::Head;
-use HTML::Abstract::Element::Title;
-use HTML::Abstract::Element::Base;
-use HTML::Abstract::Element::Link;
-use HTML::Abstract::Element::Meta;
-use HTML::Abstract::Element::Style;
-use HTML::Abstract::Element::Body;
-use HTML::Abstract::Element::Article;
-use HTML::Abstract::Element::Section;
-use HTML::Abstract::Element::Nav;
-use HTML::Abstract::Element::Aside;
-use HTML::Abstract::Element::H1;
-use HTML::Abstract::Element::H2;
-use HTML::Abstract::Element::H3;
-use HTML::Abstract::Element::H4;
-use HTML::Abstract::Element::H5;
-use HTML::Abstract::Element::H6;
 
-my @tags = (
-    'head', 'title',   'base',    'link', 'meta',  'style',
-    'body', 'article', 'section', 'nav',  'aside', 'h1',
-    'h2',   'h3',      'h4',      'h5',   'h6',
-);
+my $element_categories = {
+    'DocumentMetadata' => [ 'head', 'title', 'base', 'link', 'meta', 'style', ],
+      'Sections'       => [
+        'body', 'article', 'section', 'nav', 'aside', 'h1',
+        'h2',   'h3',      'h4',      'h5',  'h6',
+      ],
+      'GroupingContent' => [
+        'p',   'hr', 'pre',    'blockquote',
+        'ol',  'ul', 'li',     'dl',
+        'dt',  'dd', 'figure', 'figcaption',
+        'div', 'main',
+      ],
+      'TextLevelSemantics' => [
+        'a',   'em',   'strong', 'small', 's',    'cite',
+        'q',   'dfn',  'abbr',   'data',  'time', 'code',
+        'var', 'samp', 'kbd',    'sub',   'sup',  'i',
+        'b',   'u',    'mark',   'ruby',  'rb',   'rt',
+        'rtc', 'rp',   'bdi',    'bdo',   'span', 'br',
+        'wbr',
+      ],
+};
 
-foreach my $tag (@tags) {
-  my $lib_name = ucfirst($tag);
-  my $tag_obj = "HTML::Abstract::Element::$lib_name"->new();
-  is($tag_obj->tag_name, $tag, "correct tagname for $tag");
+
+foreach my $category (keys %$element_categories) {
+  my $tags = $element_categories->{$category};
+  foreach my $tag (@$tags) {
+    my $lib_name = ucfirst($tag);
+    my $class_name = "HTML::Abstract::Element::$category::$lib_name";
+    use_ok($class_name);
+    my $tag_obj = $class_name->new();
+    has_attribute_ok($tag_obj, 'tag_name', "The $lib_name object has a tag_name attribute");
+    SKIP: {
+        eval { $tag_obj->tag_name };
+        skip ( "because the tag_name attribute doesn't exist it's value cannot be found", 1 ) if $@;
+        is($tag_obj->tag_name, $tag, "correct tagname for $tag");
+    }
+  }
 }
 
 done_testing();
+
+1;
