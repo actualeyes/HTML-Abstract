@@ -1,4 +1,4 @@
-package HTML::Abstract::Element::GroupingContent::Div;
+package HTML::Abstract::Element::TabularData::Thead;
 use strict;
 use warnings;
 use Moose;

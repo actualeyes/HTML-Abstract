@@ -6,7 +6,4 @@ use namespace::autoclean;
 
 extends extends 'HTML::Abstract::Element';
 
-has 'tag_name' => (is => 'ro', default => 'strong', isa => 'Str');
-
-
 1;
