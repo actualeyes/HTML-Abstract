@@ -13,13 +13,33 @@ has [
 has 'tag_name' => (
     is      => 'ro',
     default => sub {
-      my $self = shift;
-
-      my @namespace = split '::', $self->meta->name;
-      return lcfirst($namespace[$#namespace]);
+        my $self = shift;
+        
+        my @namespace = split '::', $self->meta->name;
+        return lcfirst($namespace[$#namespace]);
     },
     predicate => 'has_tag_name',
 );
+
+has 'open_tag' => (
+    is => 'ro',
+    isa => 'Str',
+    default => sub {
+        my $self = shift;
+        return "<$self->tag_name>";
+    }
+);
+
+
+has 'close_tag' => (
+    is => 'ro',
+    isa => 'Str',
+    default => sub {
+        my $self = shift;
+        return "</$self->tag_name>";
+    }
+);
+
 
 
 1;

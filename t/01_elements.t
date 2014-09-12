@@ -77,16 +77,17 @@ sub test_element_attributes {
  SKIP: {
         eval { $tag_obj->tag_name };
         skip ( "because the tag_name attribute doesn't exist it's value cannot be found", 1 ) if $@;
-        is($tag_obj->tag_name, $tag, "correct tagname for $tag");
+        is($tag_obj->tag_name, $tag, "correct name for $tag tag");
     }
     
     foreach my $attribute (@global_attributes ) {
         has_attribute_ok($tag_obj, $attribute , "$tag object has $attribute attribute" );
     }
-    
+
+    is($tag_obj->open_tag, "<$tag_obj->tag_name>", "open tag works for $tag tag");
+    is($tag_obj->close_tag, "</$tag_obj->tag_name>", "close tag works for $tag tag");  
     
 }
-
 
 done_testing();
 

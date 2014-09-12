@@ -1,4 +1,4 @@
-package HTML::Abstract::Tag;
+package HTML::Abstract::Writer;
 use strict;
 use warnings;
 use Moose;
