@@ -4,11 +4,7 @@ use warnings;
 use Moose;
 use namespace::autoclean;
 
-has [
-    'id',  'title', 'lang', 'xml:lang', 'translate', 'xml:base',
-    'dir', 'class', 'style',
-] => ( is => 'rw', isa => 'Str' );
-
+with 'HTML::Abstract::Roles::GlobalAttributes';
 
 has 'tag_name' => (
     is      => 'ro',
@@ -21,24 +17,19 @@ has 'tag_name' => (
     predicate => 'has_tag_name',
 );
 
-has 'open_tag' => (
-    is => 'ro',
-    isa => 'Str',
-    default => sub {
-        my $self = shift;
-        return "<$self->tag_name>";
-    }
-);
+sub open_tag {
+    my $self = shift;
+    my $tag_name = $self->tag_name();
 
+    return "<$tag_name>";
+}
 
-has 'close_tag' => (
-    is => 'ro',
-    isa => 'Str',
-    default => sub {
-        my $self = shift;
-        return "</$self->tag_name>";
-    }
-);
+sub close_tag {
+    my $self = shift;
+    my $tag_name = $self->tag_name();
+
+    return "</$tag_name>";
+}
 
 __PACKAGE__->meta->make_immutable;
 

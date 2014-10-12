@@ -6,6 +6,17 @@ use namespace::autoclean;
 use HTML::Abstract::Document::Head;
 use HTML::Abstract::Document::Body;
 
+=method doctype
+
+Returns the doctype string for the html document
+
+=cut
+
+has 'doctype' => (
+    is => 'ro',
+    isa => 'Str',
+    default => "!DOCTYPE html",
+);
 
 =method head
 
@@ -35,11 +46,6 @@ has 'body' => (
     }
 );
 
-=method tables
-
-Returns an arrayref of all of the tables in the html document
-
-=cut
 
 
 __PACKAGE__->meta->make_immutable;

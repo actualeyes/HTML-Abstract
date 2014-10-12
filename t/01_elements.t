@@ -49,8 +49,9 @@ my $element_categories = {
 };
 
 my @global_attributes = (
-    'id', 'title', 'lang', 'xml:lang', 'translate', 'xml:base', 'dir', 'class',
-    'style'
+    'accesskey', 'contenteditable', 'hidden',   'id',
+    'title',     'lang',            'xml:lang', 'translate',
+    'xml:base',  'dir',             'class',    'style',
 );
 
 my $class_name = "HTML::Abstract::Element::Html";

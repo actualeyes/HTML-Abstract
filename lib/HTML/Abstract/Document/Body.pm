@@ -5,6 +5,13 @@ use Moose;
 use namespace::autoclean;
 
 
+
+=method tables
+
+Returns an arrayref of all of the tables in the html document
+
+=cut
+
 has 'tables' => (
     is => 'rw',
     isa => 'ArrayRef[HTML::Abstract::Document::Body::Table]',

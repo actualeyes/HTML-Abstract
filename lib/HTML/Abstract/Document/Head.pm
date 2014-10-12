@@ -3,6 +3,8 @@ use strict;
 use warnings;
 use Moose;
 use namespace::autoclean;
+use HTML::Abstract::Element::DocumentMetadata::Head;
+
 
 has 'allowed_elements' => (
     is      => 'ro',
@@ -19,7 +21,10 @@ has 'allowed_elements' => (
 
 has 'head_tag' => (
     is  => 'rw',
-    isa => 'ArrayRef[Str]',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Head',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Head->new();
+    }
 );
 
 has 'title_tag' => (
