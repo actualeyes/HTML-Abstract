@@ -2,8 +2,20 @@ use strict;
 use warnings;
 package HTML::Abstract;
 use Moose;
+use HTML::Abstract::Document;
 
- # ABSTRACT: An abstraction of the HTML specification
+# ABSTRACT: An abstraction of the HTML specification
+
+
+
+has document => (
+    is => 'ro',
+    isa => 'HTML::Abstract::Document',
+    default => sub {
+        HTML::Abstract::Document->new();
+    }
+);
+
 
 =method set_base
 
@@ -22,7 +34,9 @@ Set the title of the HTML document
 =cut
 
 sub set_title {
+    my ($self,$title) = @_;
 
+    $self->document->head->title->text($title);
 }
 
 =method include_style
@@ -65,14 +79,8 @@ Render the html document from the object
 =cut
 
 sub render {
-  my ($self) = @_;
 
 
-  foreach ( ) {
-    if ( ) {
-      $self->render();
-    }
-  }
 }
 
 1;

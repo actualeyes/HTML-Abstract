@@ -25,15 +25,15 @@ BEGIN { use_ok( HTML::Abstract::Document ); }
 my $document_obj = HTML::Abstract::Document->new();
 
 
-my $head_obj = $document_obj->head();
+my $head_doc_obj = $document_obj->head();
 
 #print @{$head_obj->allowed_elements};
 #print $head_obj->open_tag,"\n";
 
 
 #$head_obj->hidden("true");
-has_attribute_ok($head_obj, "head_tag", "the head element has a head_tag attribute");
-my $head_tag_obj = $head_obj->head_tag();
+has_attribute_ok($head_doc_obj, "head_tag", "the head element has a head_tag attribute");
+my $head_tag_obj = $head_doc_obj->head();
 
 
 is($head_tag_obj->open_tag,"<head>", "Open tag comes out properly");
