@@ -32,7 +32,7 @@ my $head_doc_obj = $document_obj->head();
 
 
 #$head_obj->hidden("true");
-has_attribute_ok($head_doc_obj, "head_tag", "the head element has a head_tag attribute");
+has_attribute_ok($head_doc_obj, "head", "the head element has a head_tag attribute");
 my $head_tag_obj = $head_doc_obj->head();
 
 
@@ -45,5 +45,16 @@ $head_tag_obj->hidden("true");
 is( $head_tag_obj->id(), "test", "id works correctly");
 is( $head_tag_obj->hidden(), "true", "hidden works correctly");
 
+# # test default generator tag
+my $meta_data = $head_doc_obj->meta_data();
+#is(@$meta_data->{generator}, "generator", "Generator tag name correct");
+is($meta_data->{generator}->content, "HTML Abstract", "Generator tag content correct");
 
+# Add New meta tag
 
+my $author_meta_tag = $head_doc_obj->add_meta_data({
+    name => 'author',
+    content => 'Mark Twain',
+});
+
+is($meta_data->{author}->content, "Mark Twain", "Author tag content correct");

@@ -5,6 +5,7 @@ use Moose;
 use namespace::autoclean;
 use HTML::Abstract::Element::DocumentMetadata::Head;
 use HTML::Abstract::Element::DocumentMetadata::Title;
+use HTML::Abstract::Element::DocumentMetadata::Meta;
 
 has 'allowed_elements' => (
     is      => 'ro',
@@ -48,7 +49,15 @@ has 'links' => (
 
 has 'meta_data' => (
     is => 'rw',
-    isa => 'ArrayRef[HTML::Abstract::Element::DocumentMetadata::Meta]',
+    isa => 'HashRef[HTML::Abstract::Element::DocumentMetadata::Meta]',
+    default => sub {
+        my $meta_obj = HTML::Abstract::Element::DocumentMetadata::Meta->new({
+            name => "generator",
+            content => "HTML Abstract",
+        });
+        
+        return { generator => $meta_obj};
+    }
 );
 
 has 'styles' => (
@@ -69,26 +78,38 @@ sub add_style {
 
     my ($self) = @_;
     
-    my $new_link = HTML::Abstract::Element::DocumentMetadata::Link->new();
+    my $new_link = HTML::Abstract::Element::DocumentMetadata::Style->new();
 
-    push @{$self->links}, $new_link;
+    push @{$self->styles}, $new_link;
 
     
 }
 
 sub add_meta_data {
 
-    my ($self) = @_;
+    my ($self, $args) = @_;
+    
+    my $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta->new($args);
+
+    my @meta_type_args;
+    
+    foreach my $declaration_type ('name', 'http-equiv', 'charset' ) {
+        if (exists $args->{$declaration_type} ) {
+            push @meta_type_args, $declaration_type;
+        }
+    }
+
+    my $type_arg_count = scalar(@meta_type_args);
+    
+    if ($type_arg_count > 1 ) {
+        die "more than one meta type provided";
         
-    my $new_link = HTML::Abstract::Element::DocumentMetadata::Link->new();
-
-    push @{$self->links}, $new_link;
-
-
+    } elsif ($type_arg_count == 0) {
+        die "please provide either the name http-equiv or charset properties";
+    } else {
+        $self->meta_data->{$args->{@meta_type_args[0]}} = $new_meta_tag;
+    }
 }
-
-
-
 
 __PACKAGE__->meta->make_immutable;
 
