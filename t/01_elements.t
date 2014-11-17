@@ -85,8 +85,8 @@ sub test_element_attributes {
         has_attribute_ok($tag_obj, $attribute , "$tag object has $attribute attribute" );
     }
 
-    is($tag_obj->open_tag, "<$tag_obj->tag_name>", "open tag works for $tag tag");
-    is($tag_obj->close_tag, "</$tag_obj->tag_name>", "close tag works for $tag tag");  
+    is($tag_obj->open_tag, "<".$tag_obj->tag_name.">", "open tag works for $tag tag");
+    is($tag_obj->close_tag, "</".$tag_obj->tag_name.">", "close tag works for $tag tag");  
     
 }
 

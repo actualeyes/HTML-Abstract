@@ -58,3 +58,18 @@ my $author_meta_tag = $head_doc_obj->add_meta_data({
 });
 
 is($meta_data->{author}->content, "Mark Twain", "Author tag content correct");
+
+isa_ok($head_doc_obj->meta_data->{'author'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata', "Document level metadata is correct object");
+
+my $pragma_meta_tag = $head_doc_obj->add_meta_data({
+    'http-equiv' => 'content-type',
+    content => 'text/html',
+});
+
+isa_ok($head_doc_obj->meta_data->{'content-type'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective', "Pragma directive is correct object");
+
+my $encoding_meta_tag = $head_doc_obj->add_meta_data({
+    charset => 'UTF-8',
+});
+
+isa_ok($head_doc_obj->meta_data->{'charset'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding', "Encoding directive is correct object");

@@ -5,8 +5,9 @@ use Moose;
 use namespace::autoclean;
 use HTML::Abstract::Element::DocumentMetadata::Head;
 use HTML::Abstract::Element::DocumentMetadata::Title;
-use HTML::Abstract::Element::DocumentMetadata::Meta;
-
+use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata;
+use HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective;
+use HTML::Abstract::Element::DocumentMetadata::Meta::Encoding;
 has 'allowed_elements' => (
     is      => 'ro',
     isa     => 'ArrayRef[Str]',
@@ -34,7 +35,6 @@ has 'title' => (
     default => sub {
         HTML::Abstract::Element::DocumentMetadata::Title->new();
     }
-
 );
 
 has 'base' => (
@@ -51,7 +51,9 @@ has 'meta_data' => (
     is => 'rw',
     isa => 'HashRef[HTML::Abstract::Element::DocumentMetadata::Meta]',
     default => sub {
-        my $meta_obj = HTML::Abstract::Element::DocumentMetadata::Meta->new({
+
+        
+        my $meta_obj = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata->new({
             name => "generator",
             content => "HTML Abstract",
         });
@@ -89,7 +91,7 @@ sub add_meta_data {
 
     my ($self, $args) = @_;
     
-    my $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta->new($args);
+
 
     my @meta_type_args;
     
@@ -103,14 +105,27 @@ sub add_meta_data {
     
     if ($type_arg_count > 1 ) {
         die "more than one meta type provided";
-        
     } elsif ($type_arg_count == 0) {
+        $DB::single = 1;
+        
         die "please provide either the name http-equiv or charset properties";
     } else {
-        $self->meta_data->{$args->{@meta_type_args[0]}} = $new_meta_tag;
+        my $new_meta_tag;
+        if ($meta_type_args[0] eq 'name') {
+            $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata->new($args);
+            $self->meta_data->{$args->{$meta_type_args[0]}} = $new_meta_tag;
+        } elsif ($meta_type_args[0] eq 'http-equiv' ) {
+            $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective->new($args);
+            $self->meta_data->{$args->{$meta_type_args[0]}} = $new_meta_tag;
+        } elsif ($meta_type_args[0] eq 'charset' ) {
+            $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::Encoding->new($args);
+            # There is one characterset so the key should be characterset 
+            $self->meta_data->{$meta_type_args[0]} = $new_meta_tag;
+        }
     }
 }
-
+    
+    
 __PACKAGE__->meta->make_immutable;
 
 1;
