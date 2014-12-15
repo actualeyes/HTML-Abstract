@@ -7,7 +7,7 @@ use namespace::autoclean;
 extends 'HTML::Abstract::Element';
 
 
-has text => (
+has title_text => (
     is => 'rw',
     isa => 'Str',
 );

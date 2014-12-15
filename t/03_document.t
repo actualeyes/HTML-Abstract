@@ -27,11 +27,6 @@ my $document_obj = HTML::Abstract::Document->new();
 
 my $head_doc_obj = $document_obj->head();
 
-#print @{$head_obj->allowed_elements};
-#print $head_obj->open_tag,"\n";
-
-
-#$head_obj->hidden("true");
 has_attribute_ok($head_doc_obj, "head", "the head element has a head_tag attribute");
 my $head_tag_obj = $head_doc_obj->head();
 
@@ -51,7 +46,6 @@ my $meta_data = $head_doc_obj->meta_data();
 is($meta_data->{generator}->content, "HTML Abstract", "Generator tag content correct");
 
 # Add New meta tag
-
 my $author_meta_tag = $head_doc_obj->add_meta_data({
     name => 'author',
     content => 'Mark Twain',
@@ -68,8 +62,13 @@ my $pragma_meta_tag = $head_doc_obj->add_meta_data({
 
 isa_ok($head_doc_obj->meta_data->{'content-type'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective', "Pragma directive is correct object");
 
+is($meta_data->{charset}->charset, 'utf-8', "Charset default value is utf-8 as expected");
+
 my $encoding_meta_tag = $head_doc_obj->add_meta_data({
-    charset => 'UTF-8',
+    charset => 'ISO-8859-1',
 });
 
-isa_ok($head_doc_obj->meta_data->{'charset'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding', "Encoding directive is correct object");
+isa_ok($head_doc_obj->meta_data->{charset}, 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding', "Encoding directive is correct object");
+
+is($meta_data->{charset}->charset, 'ISO-8859-1', "Updated charset has changed to proper value");
+
