@@ -6,6 +6,7 @@ use namespace::autoclean;
 use HTML::Abstract::Element::DocumentMetadata::Head;
 use HTML::Abstract::Element::DocumentMetadata::Title;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata;
+use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator;
 use HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective;
 use HTML::Abstract::Element::DocumentMetadata::Meta::Encoding;
 
@@ -42,7 +43,7 @@ has 'meta_data' => (
     default => sub {
 
         
-        my $generator_doc_obj = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata->new({
+        my $generator_doc_obj = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator->new({
             name => "generator",
             content => "HTML Abstract",
         });
@@ -94,8 +95,10 @@ sub update_meta_data {
             push @meta_type_args, $declaration_type;
         }
     }
-
+    
     my $type_arg_count = scalar(@meta_type_args);
+
+
     
     if ($type_arg_count > 1 ) {
         die "more than one meta type provided";
@@ -103,35 +106,40 @@ sub update_meta_data {
         die "please provide either the name http-equiv or charset properties";
     } else {
         my $new_meta_tag;
-        if ($meta_type_args[0] eq 'name') {
-            if (exists $self->meta_data->{$args->{$meta_type_args[0]}}) {
+        my $meta_type_handle = $meta_type_args[0] ;
+        
+        if ($meta_type_handle eq 'name') {
+            if (exists $self->meta_data->{$args->{$meta_type_handle}}) {
                 # Modify existing meta tag
-                my $meta_tag_obj = $self->meta_data->{$args->{$meta_type_args[0]}};
-                
+                my $meta_name = $args->{name};
+                my $meta_tag_obj = $self->meta_data->{$meta_name};
+                $meta_tag_obj->content($args->{content});
             } else {
                 # Create new meta tag 
                 $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata->new($args);
-                $self->meta_data->{$args->{$meta_type_args[0]}} = $new_meta_tag;
+                $self->meta_data->{$args->{$meta_type_handle}} = $new_meta_tag;
             }
             
-        } elsif ($meta_type_args[0] eq 'http-equiv' ) {
-            if (exists $self->meta_data->{$args->{$meta_type_args[0]}}) {
+        } elsif ($meta_type_handle eq 'http-equiv' ) {
+            if (exists $self->meta_data->{$args->{$meta_type_handle}}) {
                 # Modify existing meta tag
-                $self->meta_data->{$args->{$meta_type_args[0]}}
+                $self->meta_data->{$args->{$meta_type_handle}}
             } else {
                 # Create new meta tag
                 $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective->new($args);
-                $self->meta_data->{$args->{$meta_type_args[0]}} = $new_meta_tag;
+                $self->meta_data->{$args->{$meta_type_handle}} = $new_meta_tag;
             }
-        } elsif ($meta_type_args[0] eq 'charset' ) {
-            if (exists $self->meta_data->{$meta_type_args[0]}) {
+        } elsif ($meta_type_handle eq 'charset' ) {
+            if (exists $self->meta_data->{charset}) {
                 # Modify existing meta tag
-                $self->meta_data->{$meta_type_args[0]}
+                my $meta_tag_object = $self->meta_data->{charset};
+
+                $meta_tag_object->charset($args->{charset});
             } else {
                 # Create new meta tag
                 $new_meta_tag = HTML::Abstract::Element::DocumentMetadata::Meta::Encoding->new($args);
                 # There is one characterset so the key should be characterset 
-                $self->meta_data->{$meta_type_args[0]} = $new_meta_tag;
+                $self->meta_data->{$meta_type_handle} = $new_meta_tag;
             }
             
         }

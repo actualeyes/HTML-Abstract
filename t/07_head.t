@@ -12,6 +12,8 @@
 # change 'tests => 1' to 'tests => last_test_to_print';
 
 use Test::More qw( no_plan );
+use Try::Tiny;
+
 BEGIN { use_ok( HTML::Abstract::Document::Head ); }
 
 #########################
@@ -21,11 +23,31 @@ BEGIN { use_ok( HTML::Abstract::Document::Head ); }
 
 my $head_obj = HTML::Abstract::Document::Head->new();
 
-$head_obj->add_meta_data({
+$head_obj->update_meta_data({
     name    => "description",
     content => "A nice website",
 });
 
 is($head_obj->meta_data->{description}->content, "A nice website", "Description text matches");
 
+my $generator_write_error;
 
+try {
+    $head_obj->update_meta_data({
+        name => "generator",
+        content => "another name",
+    });
+} catch {
+    $generator_write_error = $_;
+};
+
+like($generator_write_error,
+     qr/^Cannot assign a value to a read-only accessor/,
+     "Generator is read only",
+ );
+
+is(
+    $head_obj->meta_data->{generator}->content,
+    "HTML Abstract",
+    "Generator content unchanged"
+);

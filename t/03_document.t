@@ -46,7 +46,7 @@ my $meta_data = $head_doc_obj->meta_data();
 is($meta_data->{generator}->content, "HTML Abstract", "Generator tag content correct");
 
 # Add New meta tag
-my $author_meta_tag = $head_doc_obj->add_meta_data({
+my $author_meta_tag = $head_doc_obj->update_meta_data({
     name => 'author',
     content => 'Mark Twain',
 });
@@ -55,7 +55,7 @@ is($meta_data->{author}->content, "Mark Twain", "Author tag content correct");
 
 isa_ok($head_doc_obj->meta_data->{'author'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata', "Document level metadata is correct object");
 
-my $pragma_meta_tag = $head_doc_obj->add_meta_data({
+my $pragma_meta_tag = $head_doc_obj->update_meta_data({
     'http-equiv' => 'content-type',
     content => 'text/html',
 });
@@ -63,8 +63,9 @@ my $pragma_meta_tag = $head_doc_obj->add_meta_data({
 isa_ok($head_doc_obj->meta_data->{'content-type'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective', "Pragma directive is correct object");
 
 is($meta_data->{charset}->charset, 'utf-8', "Charset default value is utf-8 as expected");
+$DB::single = 1;
 
-my $encoding_meta_tag = $head_doc_obj->add_meta_data({
+my $encoding_meta_tag = $head_doc_obj->update_meta_data({
     charset => 'ISO-8859-1',
 });
 

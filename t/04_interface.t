@@ -27,11 +27,11 @@ my $document = $abstract_obj->document();
 
 is( $document->doctype, "!DOCTYPE html", "Doctype text matches");
 
-is($document->head->title->text, undef, "Document Title undefined when not set");
+is($document->head->title->title_text, undef, "Document Title undefined when not set");
 
 
-$abstract_obj->set_title("Test Title");
+$abstract_obj->title("Test Title");
 
 
-is($document->head->title->text, "Test Title", "Document title set correctly");
+is($document->head->title->title_text, "Test Title", "Document title set correctly");
 
