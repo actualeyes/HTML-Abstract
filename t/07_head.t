@@ -51,3 +51,44 @@ is(
     "HTML Abstract",
     "Generator content unchanged"
 );
+
+#keyword tests
+
+is_deeply( $head_obj->keywords->content, {}, "Keywords are initially empty");
+
+$head_obj->add_keywords("Test", "One");
+
+is_deeply( $head_obj->keywords->content,
+           {
+               test => 1,
+               one => 1
+           },
+           "Keywords added properly"
+       ); 
+
+$head_obj->remove_keywords("tEST");
+
+is_deeply( $head_obj->keywords->content,
+           {
+               one => 1
+           },
+           "Keywords removed properly"
+       ); 
+
+$head_obj->add_keywords("BoB");
+
+is_deeply( $head_obj->keywords->content,
+           {
+               bob => 1,
+               one => 1,
+           },
+           "Keyword added to existing list properly"
+       ); 
+
+$head_obj->clear_keywords;
+
+
+is_deeply( $head_obj->keywords->content,
+           {},
+           "Keywords cleared properly"
+       ); 

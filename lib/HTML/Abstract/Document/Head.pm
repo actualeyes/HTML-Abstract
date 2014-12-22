@@ -7,6 +7,7 @@ use HTML::Abstract::Element::DocumentMetadata::Head;
 use HTML::Abstract::Element::DocumentMetadata::Title;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator;
+use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Keywords;
 use HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective;
 use HTML::Abstract::Element::DocumentMetadata::Meta::Encoding;
 
@@ -58,6 +59,19 @@ has 'meta_data' => (
             charset   => $charset_doc_obj,
         };
     }
+);
+
+has 'keywords' => (
+    is      => 'rw',
+    isa     => 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Keywords',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Keywords->new();
+    },
+    handles => {
+        add_keywords    => 'add',
+        remove_keywords => 'remove',
+        clear_keywords  => 'clear',
+    },
 );
 
 has 'styles' => (
