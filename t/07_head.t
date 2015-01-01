@@ -16,42 +16,13 @@ use Try::Tiny;
 
 BEGIN { use_ok( HTML::Abstract::Document::Head ); }
 
+
 #########################
 
 # Insert your test code below, the Test::More module is used here so read
 # its man page ( perldoc Test::More ) for help writing this test script.
 
 my $head_obj = HTML::Abstract::Document::Head->new();
-
-$head_obj->update_meta_data({
-    name    => "description",
-    content => "A nice website",
-});
-
-is($head_obj->meta_data->{description}->content, "A nice website", "Description text matches");
-
-my $generator_write_error;
-
-try {
-    $head_obj->update_meta_data({
-        name => "generator",
-        content => "another name",
-    });
-} catch {
-    $generator_write_error = $_;
-};
-
-like($generator_write_error,
-     qr/^Cannot assign a value to a read-only accessor/,
-     "Generator is read only",
- );
-
-is(
-    $head_obj->meta_data->{generator}->content,
-    "HTML Abstract",
-    "Generator content unchanged"
-);
-
 #keyword tests
 
 is_deeply( $head_obj->keywords->content, {}, "Keywords are initially empty");
@@ -92,3 +63,5 @@ is_deeply( $head_obj->keywords->content,
            {},
            "Keywords cleared properly"
        ); 
+
+

@@ -12,11 +12,26 @@ Returns the doctype string for the html document
 
 =cut
 
-has 'doctype' => (
+has doctype => (
     is => 'ro',
-    isa => 'Str',
-    default => "!DOCTYPE html",
+    isa => 'HTML::Abstract::Element::Doctype',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Doctype->new();
+    },
 );
+
+=method html
+
+=cut
+
+has doctype => (
+    is => 'ro',
+    isa => 'HTML::Abstract::Element::Html',
+        default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Html->new();
+    },
+
+)
 
 =method head
 
@@ -24,7 +39,7 @@ Returns the head object for the html document
 
 =cut
 
-has 'head' => (
+has head => (
     is => 'rw',
     isa => 'HTML::Abstract::Document::Head',
     default => sub {
@@ -38,7 +53,7 @@ Returns the body object for the html document
 
 =cut
 
-has 'body' => (
+has body => (
     is => 'rw',
     isa => 'HTML::Abstract::Document::Body',
     default => sub {
@@ -47,6 +62,16 @@ has 'body' => (
 );
 
 
+sub render {
+    # Render HTML Tag as Root
+    
+    # need to add html tag object to document class
+    # need to add document element object
+    # need to modify document element attribute to refer to element obj
+    # Render Everything in the head object
+    # Render Everything in the body object
+    
+}
 
 __PACKAGE__->meta->make_immutable;
 

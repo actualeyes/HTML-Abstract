@@ -6,7 +6,13 @@ use namespace::autoclean;
 
 extends 'HTML::Abstract::Element';
 
-has 'content' => (
+has tag_name => (
+    is => 'ro',
+    isa => 'Str',
+    default => 'meta',
+);
+    
+has content => (
     is  => 'rw',
     isa => 'Str',
 );

@@ -5,6 +5,8 @@ use Moose;
 use namespace::autoclean;
 use Moose::Util::TypeConstraints;
 
+extends 'HTML::Abstract::Element::DocumentMetadata::Meta';
+
 has 'http-equiv' => (
     is => 'rw',
     isa => enum([qw(content-type default-style refresh)]),

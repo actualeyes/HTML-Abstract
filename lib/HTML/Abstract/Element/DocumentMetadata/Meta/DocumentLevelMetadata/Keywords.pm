@@ -4,12 +4,19 @@ use warnings;
 use Moose;
 use namespace::autoclean;
 
-has 'content' => (
+extends 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata';
+
+has content => (
     is => 'rw',
     isa => 'HashRef',
     default => sub { {} },
 );
 
+has name => (
+    is      => 'ro',
+    isa     => 'Str',
+    default => 'keywords',
+);
 
 sub add {
     my ($self, @args) = @_;
