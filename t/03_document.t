@@ -43,33 +43,33 @@ is( $head_tag_obj->hidden(), "true", "hidden works correctly");
 # # test default generator tag
 my $meta_data = $head_doc_obj->meta_data();
 #is(@$meta_data->{generator}, "generator", "Generator tag name correct");
-is($meta_data->{generator}->content, "HTML Abstract", "Generator tag content correct");
+#is($meta_data->{generator}->content, "HTML Abstract", "Generator tag content correct");
 
 # Add New meta tag
-my $author_meta_tag = $head_doc_obj->update_meta_data({
-    name => 'author',
-    content => 'Mark Twain',
-});
+# my $author_meta_tag = $head_doc_obj->update_meta_data({
+#     name => 'author',
+#     content => 'Mark Twain',
+# });
 
-is($meta_data->{author}->content, "Mark Twain", "Author tag content correct");
+#is($meta_data->{author}->content, "Mark Twain", "Author tag content correct");
 
-isa_ok($head_doc_obj->meta_data->{'author'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata', "Document level metadata is correct object");
+#isa_ok($head_doc_obj->meta_data->{'author'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata', "Document level metadata is correct object");
 
-my $pragma_meta_tag = $head_doc_obj->update_meta_data({
-    'http-equiv' => 'content-type',
-    content => 'text/html',
-});
+#my $pragma_meta_tag = $head_doc_obj->update_meta_data({
+#    'http-equiv' => 'content-type',
+#    content => 'text/html',
+#});
 
-isa_ok($head_doc_obj->meta_data->{'content-type'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective', "Pragma directive is correct object");
+#isa_ok($head_doc_obj->meta_data->{'content-type'}, 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective', "Pragma directive is correct object");
 
-is($meta_data->{charset}->charset, 'utf-8', "Charset default value is utf-8 as expected");
-$DB::single = 1;
+#is($meta_data->{charset}->charset, 'utf-8', "Charset default value is utf-8 as expected");
+#$DB::single = 1;
 
-my $encoding_meta_tag = $head_doc_obj->update_meta_data({
-    charset => 'ISO-8859-1',
-});
+#my $encoding_meta_tag = $head_doc_obj->update_meta_data({
+#    charset => 'ISO-8859-1',
+#});
 
-isa_ok($head_doc_obj->meta_data->{charset}, 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding', "Encoding directive is correct object");
+#isa_ok($head_doc_obj->meta_data->{charset}, 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding', "Encoding directive is correct object");
 
-is($meta_data->{charset}->charset, 'ISO-8859-1', "Updated charset has changed to proper value");
+#is($meta_data->{charset}->charset, 'ISO-8859-1', "Updated charset has changed to proper value");
 

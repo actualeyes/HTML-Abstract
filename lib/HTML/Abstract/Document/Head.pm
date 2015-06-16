@@ -5,12 +5,13 @@ use Moose;
 use namespace::autoclean;
 use HTML::Abstract::Element::DocumentMetadata::Head;
 use HTML::Abstract::Element::DocumentMetadata::Title;
+use HTML::Abstract::Element::DocumentMetadata::Meta;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator;
 use HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Keywords;
 use HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective;
 use HTML::Abstract::Element::DocumentMetadata::Meta::Encoding;
-
+use HTML::Abstract::Element::DocumentMetadata::Head;
 
 # Head Elements
 
@@ -21,7 +22,25 @@ use HTML::Abstract::Element::DocumentMetadata::Meta::Encoding;
 #         # default-style refresh
 #     # Charset
 
- 
+has tag_types => (
+    is => 'ro',
+    isa => 'ArrayRef',
+    default => sub { [
+        'title',
+#       'base',
+#       'link',
+#       'meta_data',
+#       'styles',
+    ]}
+        
+);
+has head => (
+    is => 'rw',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Head',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Head->new();
+    },
+);
 
 
 has title => (
@@ -30,6 +49,8 @@ has title => (
     default => sub {
         HTML::Abstract::Element::DocumentMetadata::Title->new();
     },
+    predicate => 'has_title',
+    clearer   => 'clear_title',
     handles => [qw(title_text)],
 );
 
@@ -41,6 +62,48 @@ has base => (
 has links => (
     is => 'rw',
     isa => 'ArrayRef[HTML::Abstract::Element::DocumentMetadata::Link]',
+);
+
+# Meta
+
+has 'application-name' => (
+    is  => 'ro',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Meta',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator->new({
+            name => "generator",
+            content => "HTML Abstract",
+        });
+    }
+);
+
+has author => (
+    is => 'rw',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Meta',
+);
+
+has description => (
+    is => 'rw',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Meta',
+);
+
+has generator => (
+    is => 'rw',
+    isa => 'HTML::Abstract::Element::DocumentMetadata::Meta',
+    
+);
+
+has encoding => (
+    is      => 'rw',
+    isa     => 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding',
+    default => sub {
+        HTML::Abstract::Element::DocumentMetadata::Meta::Encoding->new(
+            charset => 'utf-8',
+        );
+    },
+    handles => {
+        charset => 'charset',
+    }
 );
 
 has keywords => (
@@ -56,18 +119,9 @@ has keywords => (
     },
 );
 
-has charset => (
-    is      => 'rw',
-    isa     => 'HTML::Abstract::Element::DocumentMetadata::Meta::Encoding',
-    default => sub {
-        HTML::Abstract::Element::DocumentMetadata::Meta::Encoding->new(
-            charset => 'utf-8',
-        );
-    }
-);
 
-has default_style => (
-    is     => 'rw',
+has 'default-style' => (
+     is     => 'rw',
     isa    => 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective::DefaultStyle',
 );
 
@@ -76,28 +130,34 @@ has refresh => (
     isa    => 'HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective::Refresh',
 );
 
-# has meta_data => (
+has styles => (
+    is => 'rw',
+    isa => 'ArrayRef[HTML::Abstract::Element::DocumentMetadata::Style]',
+);
+
+has meta_data => (
+    is => 'rw',
+    isa => 'ArrayRef[HTML::Abstract::Element::DocumentMetadata::Meta]',
+);
+
+# has tree => (
 #     is => 'rw',
-#     isa => 'HashRef[HTML::Abstract::Element::DocumentMetadata::Meta]',
+#     isa => 'HashRef[HTML::Abstract::Element]',
 #     default => sub {
 #         my ($self) = @_;
-#         my $generator_doc_obj = HTML::Abstract::Element::DocumentMetadata::Meta::DocumentLevelMetadata::Generator->new({
-#             name => "generator",
-#             content => "HTML Abstract",
-#         });
 
 #         return {
 #             generator => $generator_doc_obj,
 #             charset   => $self->charset,
 #             keywords  => $self->keywords,
+#             styles    => $self->styles,
+#             links     => $self->links,
+#             refresh   => $self->refresh,
+            
 #         };
 #     }
 # );
 
-has styles => (
-    is => 'rw',
-    isa => 'ArrayRef[HTML::Abstract::Element::DocumentMetadata::Style]',
-);
 
 sub add_link {
     my ($self) = @_;
@@ -112,7 +172,6 @@ sub add_link {
 #     my ($self, $args) = @_;
 #     my $new_directive = HTML::Abstract::Element::DocumentMetadata::Meta::PragmaDirective->new($args);
 #     push @{$self->pragma_directives}, $new_directive;
-    
 # }
 
 sub add_style {
@@ -122,6 +181,35 @@ sub add_style {
     my $new_link = HTML::Abstract::Element::DocumentMetadata::Style->new();
 
     push @{$self->styles}, $new_link;
+}
+
+sub _add_to_tree {
+    my ($self) = @_;
+    my $tree = $self->tree;
+    
+    
+}
+
+sub render {
+    my ($self) = @_;
+    my $output;
+    
+    print $self->head->open_tag,"\n";
+    my $indent = "  ";
+    
+    foreach my $tag_type (@{$self->tag_types}) {
+        # If Its a arrayref then iterate otherwise print it out
+        if (ref($tag_type) ne 'ARRAY' ) {
+            my $element = $self->$tag_type;
+            my $predicate = "has_".$tag_type;
+            
+            if ($element->$predicate) {
+                print $indent.$element->open_tag,"\n";
+                print $indent.$element->close_tag,"\n";
+            }
+        }
+    }   
+    print $self->head->close_tag(), "\n";
 }
 
 

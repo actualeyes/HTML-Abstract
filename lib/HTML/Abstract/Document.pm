@@ -5,6 +5,9 @@ use Moose;
 use namespace::autoclean;
 use HTML::Abstract::Document::Head;
 use HTML::Abstract::Document::Body;
+use HTML::Abstract::Element::Doctype;
+use HTML::Abstract::Element::Html;
+
 
 =method doctype
 
@@ -16,7 +19,7 @@ has doctype => (
     is => 'ro',
     isa => 'HTML::Abstract::Element::Doctype',
     default => sub {
-        HTML::Abstract::Element::DocumentMetadata::Doctype->new();
+        HTML::Abstract::Element::Doctype->new();
     },
 );
 
@@ -24,14 +27,15 @@ has doctype => (
 
 =cut
 
-has doctype => (
+has html => (
     is => 'ro',
     isa => 'HTML::Abstract::Element::Html',
         default => sub {
-        HTML::Abstract::Element::DocumentMetadata::Html->new();
+        HTML::Abstract::Element::Html->new();
     },
 
-)
+);
+
 
 =method head
 
@@ -61,11 +65,17 @@ has body => (
     }
 );
 
+has tree => (
+    is => 'rw',
+    isa => 'HashRef',
+    default => sub {{}},
+);
+
+
 
 sub render {
     # Render HTML Tag as Root
     
-    # need to add html tag object to document class
     # need to add document element object
     # need to modify document element attribute to refer to element obj
     # Render Everything in the head object

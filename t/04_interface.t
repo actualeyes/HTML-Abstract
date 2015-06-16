@@ -25,7 +25,7 @@ my $abstract_obj = HTML::Abstract->new();
 my $document = $abstract_obj->document();
 
 
-is( $document->doctype, "!DOCTYPE html", "Doctype text matches");
+is( $document->doctype->open_tag, "<!DOCTYPE html>", "Doctype text matches");
 
 is($document->head->title->title_text, undef, "Document Title undefined when not set");
 

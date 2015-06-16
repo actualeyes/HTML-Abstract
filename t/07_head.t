@@ -64,4 +64,14 @@ is_deeply( $head_obj->keywords->content,
            "Keywords cleared properly"
        ); 
 
+is ( "<head>", $head_obj->head->open_tag, "Head open tag correct");
+
+$head_obj->title->title_text("Hello World");
+
+# Render testing 
+# my $head_html = $head_obj->render;
+
+
+# print $head_html;
+
 
