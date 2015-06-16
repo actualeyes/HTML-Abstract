@@ -82,5 +82,5 @@ has style => (
     isa => 'Str',
     predicate => 'has_style',
 );
-  
+
 1;
